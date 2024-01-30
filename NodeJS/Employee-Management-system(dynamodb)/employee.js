@@ -25,7 +25,19 @@ const createEmployee = (req, res) => {
     }
   );
 };
+// the function will fetch all employees from the database
+const getEmployees = (req,res) =>{
+    pool.query('SELECT * FROM employees', (err,result) =>{
+        if(err) {
+            throw(err)
+        }
+        res.json({
+            data:result.rows
+        })
+    })
+}
 
 module.exports = {
-    createEmployee
+    createEmployee,
+    getEmployees
 }
