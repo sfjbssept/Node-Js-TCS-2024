@@ -18,6 +18,9 @@ app.get("/allemp",dbEmp.getEmployees)
 
 app.get("/:id" , dbEmp.getEmployeeById);
 
+app.put("/update/:id", dbEmp.updateEmployee)
+
 app.listen(PORT, () => {
   console.log(`The app is running on port ${PORT}`);
 });
+ 
