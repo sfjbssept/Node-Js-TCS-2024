@@ -20,6 +20,8 @@ app.get("/:id" , dbEmp.getEmployeeById);
 
 app.put("/update/:id", dbEmp.updateEmployee)
 
+app.delete("/del/:id",dbEmp.deleteEmployeeById);
+
 app.listen(PORT, () => {
   console.log(`The app is running on port ${PORT}`);
 });

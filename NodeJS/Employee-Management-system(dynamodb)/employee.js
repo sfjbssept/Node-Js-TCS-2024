@@ -71,9 +71,23 @@ const updateEmployee = (req, res) => {
   );
 };
 
+const deleteEmployeeById = (req, res) => {
+  let id = parseInt(req.params.id);
+
+  pool.query('DELETE FROM employees WHERE "ID"=$1', [id], (err, result) => {
+    if (err) {
+      throw err;
+    }
+    res.json({
+      msg: `Employee delete with the ID ${id}`
+    });
+  });
+};
+
 module.exports = {
   createEmployee,
   getEmployees,
   getEmployeeById,
-  updateEmployee
+  updateEmployee,
+  deleteEmployeeById
 };
