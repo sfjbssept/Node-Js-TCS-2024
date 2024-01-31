@@ -40,7 +40,7 @@ const getEmployees = (req,res) =>{
 const getEmployeeById = (req,res) => {
     let id = parseInt(req.params.id)
 
-    pool.query('SELECT * FROM employees WHERE ID=$1',[id],(err,result) => {
+    pool.query('SELECT * FROM employees WHERE "ID"=$1',[id],(err,result) => {
         if(err) {
             throw err
         }
