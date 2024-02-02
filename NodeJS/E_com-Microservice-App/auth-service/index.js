@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const User = require("./User");
 const jwt= require("jsonwebtoken")
 
+app.use(express.json())
 mongoose.connect(
     "mongodb://localhost:27017/auth-service",
     {
@@ -17,9 +18,8 @@ mongoose.connect(
 
 //  register a new user
 app.post("/auth/register", async(req,res) => {
-    const {email, password, name} = req.body;
-
-    const userExists = await User.findOne({email})
+    const {name,email,password,} = req.body;
+    const userExists = await User.findOne({ email })
     if(userExists) {
         return res.json({message: "User already exists"});
     } else {
@@ -40,6 +40,11 @@ app.post("/auth/login",async( req,res) => {
     if(!user) {
         return res.json({message:"User dose not exist"})
     } else {
+
+        // check if the enteted password is correct
+        if(password != user.password) {
+            return res.json({message:"Incorrect password"})
+        }
         const payload = {
             email,
             name: user.name,
@@ -55,7 +60,7 @@ app.post("/auth/login",async( req,res) => {
 })
 
 
-app.use(express.json())
+
 
 app.listen(PORT, () => {
     console.log(`Auth service is running at ${PORT}`);
