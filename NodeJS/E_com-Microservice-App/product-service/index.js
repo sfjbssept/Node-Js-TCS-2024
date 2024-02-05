@@ -3,7 +3,7 @@ const app = express();
 const PORT = 8080
 const mongoose = require("mongoose");
 const jwt= require("jsonwebtoken")
-const amqp = require("amqp")
+const amqp = require("amqplib")
 const Product = require("./Product")
 const isAuthenticated = require("../isAuthenticated")
 var channel, connection;
@@ -21,10 +21,10 @@ mongoose.connect(
 
 async function connect() {
     const amqpServer = "amqp://localhost:5672";
-    connection = amqp.connect(amqpServer)
-    channel = connection.createChannel()
-    await channel.assertQueue("PRODUCT")
-}
+    connection = await amqp.connect(amqpServer);
+    channel = await connection.createChannel();
+    await channel.assertQueue("PRODUCT");
+  }
 connect()
 
 // create a new product
