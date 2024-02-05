@@ -41,6 +41,16 @@ app.post("/product/create" , isAuthenticated, async(req,res)=>{
 
 })
 
+// User will send a list of product Id to bbuy
+// create an order with those products and total vaslue of the sum of products
+
+app.post("/product/buy", isAuthenticated, async(req,res) => {
+    const {ids} = req.body;
+    const products = await Product.find({_id : { $in :ids }});
+    
+
+})
+
 
 app.listen(PORT, () => {
     console.log(`product service is running at ${PORT}`);
