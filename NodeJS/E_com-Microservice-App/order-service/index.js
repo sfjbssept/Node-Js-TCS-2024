@@ -23,9 +23,16 @@ async function connect() {
     const amqpServer = "amqp://localhost:5672";
     connection = await amqp.connect(amqpServer);
     channel = await connection.createChannel();
-    await channel.assertQueue("PRODUCT");
+    await channel.assertQueue("ORDER");
   }
-connect()
+connect().then(() => {
+    channel.consume("ORDER" , data => {
+        const { products, userEmail} = JSON.parse(data.content)
+
+        console.log("Consuming the ORder Queue");
+        console.log(products);
+    })
+})
 app.listen(PORT, () => {
     console.log(`order service is running at ${PORT}`);
 })
