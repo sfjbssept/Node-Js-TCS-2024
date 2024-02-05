@@ -7,6 +7,7 @@ const amqp = require("amqplib");
 const Product = require("./Product");
 const isAuthenticated = require("../isAuthenticated");
 var channel, connection;
+var order;
 
 app.use(express.json());
 mongoose
@@ -56,6 +57,11 @@ app.post("/product/buy", isAuthenticated, async (req, res) => {
       })
     )
   );
+  channel.consume("PRODUCT",data => {
+    console.log("Consuming PRoduct Queue");
+    order = JSON.parse(data.content)
+  })
+  return res.json(order);
 });
 
 app.listen(PORT, () => {

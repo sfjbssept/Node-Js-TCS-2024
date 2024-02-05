@@ -25,10 +25,26 @@ async function connect() {
     channel = await connection.createChannel();
     await channel.assertQueue("ORDER");
   }
+function createOrder(products,userEmail) {
+    let total = 0;
+    for (let t=0;t<products.length;++t){
+        total += products[t].price;
+    }
+    const newOrder = new Order({
+        products,
+        uset: userEmail,
+        total_price: total
+    })
+    newOrder.save()
+    return newOrder
+}
+
 connect().then(() => {
     channel.consume("ORDER" , data => {
         const { products, userEmail} = JSON.parse(data.content)
-
+        const newOrder = createOrder(products, userEmail)
+        channel.ack(data)
+        channel.sendToQueue("PRODUCT",Buffer.from(JSON.stringify({newOrder})))
         console.log("Consuming the ORder Queue");
         console.log(products);
     })
